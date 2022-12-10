@@ -43,6 +43,10 @@ struct ContentView: View {
                 TextField("First name", text: $user.firstName)
                 TextField("Last name", text: $user.lastName)
                 
+                Button("Show Sheet"){
+                    showingSheet.toggle()
+                }
+                
                 List{
                     ForEach(numbers, id: \.self){
                         Text("Row \($0)")
