@@ -31,6 +31,7 @@ struct ContentView: View {
     @StateObject var user = User()
     
     @State private var showingSheet = false
+    @State private var showingView3 = false
     
     @State private var numbers = [Int]()
     @State private var currentNumber = 1
@@ -43,8 +44,12 @@ struct ContentView: View {
                 TextField("First name", text: $user.firstName)
                 TextField("Last name", text: $user.lastName)
                 
-                Button("Show Sheet"){
+                Button("Show Sheet SecondView"){
                     showingSheet.toggle()
+                }
+                
+                Button("Show view 3"){
+                    showingView3.toggle()
                 }
                 
                 List{
@@ -61,6 +66,9 @@ struct ContentView: View {
             }
             .sheet(isPresented: $showingSheet){
                 SecondView(name: user.firstName)
+            }
+            .sheet(isPresented: $showingView3){
+                View3()
             }
             .navigationTitle("onDelete()")
             .toolbar{

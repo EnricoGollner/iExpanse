@@ -10,8 +10,18 @@ import SwiftUI
 struct View2: View {
     @ObservedObject var user = User()
     
+    @Environment(\.dismiss) var dismiss
+    
+    let name: String
+    
     var body: some View {
-        Text("\(user.firstName) \(user.lastName)")
+        VStack(spacing: 20){
+            Text("\(user.firstName) \(user.lastName)")
+            
+            Button("Dismiss"){
+                dismiss()
+            }
+        }
     }
 }
 
