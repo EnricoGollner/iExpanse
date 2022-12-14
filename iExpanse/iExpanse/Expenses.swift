@@ -10,10 +10,8 @@ import Foundation
 class Expenses: ObservableObject{
     @Published var items = [ExpenseItem]() {
         didSet{
-            let encoder = JSONEncoder()
-            
-            if let encoded = try? encoder.encode(items){
-                UserDefaults.standard.set(encoded, forKey: "Items")
+            if let encoded = try? JSONEncoder().encode(items){  // Archiving - Making the array a JSON
+                UserDefaults.standard.set(encoded, forKey: "Items")  // Saving the data to be decoded and used when the app relaunch
             }
         }
     }
@@ -22,7 +20,6 @@ class Expenses: ObservableObject{
         if let savedItems = UserDefaults.standard.data(forKey: "Items"){
             if let decodedItems = try? JSONDecoder().decode([ExpenseItem].self, from: savedItems){
                 items = decodedItems
-                return
             }
         }
         
