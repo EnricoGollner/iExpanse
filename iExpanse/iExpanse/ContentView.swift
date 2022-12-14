@@ -32,10 +32,16 @@ struct ContentView: View {
             }
             .navigationTitle("iExpense")
             .toolbar{
-                Button{
-                    showingAddExpense = true
-                } label: {
-                    Image(systemName: "plus")
+                ToolbarItem(placement: .navigationBarLeading){
+                    EditButton()
+                }
+                
+                ToolbarItem(placement: .navigationBarTrailing){
+                    Button{
+                        showingAddExpense = true
+                    } label: {
+                        Image(systemName: "plus")
+                    }
                 }
             }
             .sheet(isPresented: $showingAddExpense){
