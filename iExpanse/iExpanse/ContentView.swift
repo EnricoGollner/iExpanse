@@ -19,17 +19,19 @@ struct ItemView: View{
     var body: some View{
         ForEach(expenses.items){ item in
             if item.type == typeWanted{
-                HStack{
-                    VStack(alignment: .leading){
-                        Text(item.name)
-                            .font(.headline)
-                        Text(item.type)
+                Section(header: Text(typeWanted)){
+                    HStack{
+                        VStack(alignment: .leading){
+                            Text(item.name)
+                                .font(.headline)
+                            Text(item.type)
+                        }
+                        
+                        Spacer()
+                        
+                        Text(item.amount, format: .currency(code: Locale.current.currency?.identifier ?? "BRL"))
+                            .foregroundColor(stylingAmount(item.amount))
                     }
-                    
-                    Spacer()
-                    
-                    Text(item.amount, format: .currency(code: Locale.current.currency?.identifier ?? "BRL"))
-                        .foregroundColor(stylingAmount(item.amount))
                 }
             }
         }
@@ -45,13 +47,9 @@ struct ContentView: View {
     var body: some View{
         NavigationStack{
             List{
-                Section(header: Text("Personal")){
-                    ItemView(expenses: expenses, typeWanted: "Personal", stylingAmount: stylingAmount, removeRows: removeRows)
-                }
+                ItemView(expenses: expenses, typeWanted: "Personal", stylingAmount: stylingAmount, removeRows: removeRows)
                 
-                Section(header: Text("Business")){
-                    ItemView(expenses: expenses, typeWanted: "Business", stylingAmount: stylingAmount, removeRows: removeRows)
-                }
+                ItemView(expenses: expenses, typeWanted: "Business", stylingAmount: stylingAmount, removeRows: removeRows)
             }
             .navigationTitle("iExpense")
             .toolbar{
