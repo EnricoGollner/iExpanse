@@ -7,6 +7,36 @@
 
 import SwiftUI
 
+struct ItemView: View{
+    @ObservedObject var expenses: Expenses
+    
+    let typeWanted: String
+    
+    var stylingAmount: (Double) -> Color
+    
+    var removeRows: (IndexSet) -> Void
+    
+    var body: some View{
+        ForEach(expenses.items){ item in
+            if item.type == typeWanted{
+                HStack{
+                    VStack(alignment: .leading){
+                        Text(item.name)
+                            .font(.headline)
+                        Text(item.type)
+                    }
+                    
+                    Spacer()
+                    
+                    Text(item.amount, format: .currency(code: Locale.current.currency?.identifier ?? "BRL"))
+                        .foregroundColor(stylingAmount(item.amount))
+                }
+            }
+        }
+        .onDelete(perform: removeRows)
+    }
+}
+
 struct ContentView: View {
     @StateObject var expenses = Expenses()
     
@@ -15,20 +45,13 @@ struct ContentView: View {
     var body: some View{
         NavigationStack{
             List{
-                ForEach(expenses.items){ item in
-                    HStack{
-                        VStack(alignment: .leading){
-                            Text(item.name)
-                                .font(.headline)
-                            Text(item.type)
-                        }
-                        
-                        Spacer()
-                        
-                        Text(item.amount, format: .currency(code: "BRL"))
-                    }
+                Section(header: Text("Personal")){
+                    ItemView(expenses: expenses, typeWanted: "Personal", stylingAmount: stylingAmount, removeRows: removeRows)
                 }
-                .onDelete(perform: removeRows)
+                
+                Section(header: Text("Business")){
+                    ItemView(expenses: expenses, typeWanted: "Business", stylingAmount: stylingAmount, removeRows: removeRows)
+                }
             }
             .navigationTitle("iExpense")
             .toolbar{
@@ -52,6 +75,17 @@ struct ContentView: View {
     
     func removeRows(at offsets: IndexSet){
         expenses.items.remove(atOffsets: offsets)
+    }
+    
+    func stylingAmount(amount: Double) -> Color{
+        switch amount{
+        case 0..<10:
+            return .green
+        case 11..<100:
+            return .blue
+        default:
+            return .red
+        }
     }
 }
 
